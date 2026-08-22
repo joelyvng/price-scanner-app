@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <title>轻松管理</title>
+    <meta name="description" content="Escanea el código de barras de un producto y consulta al instante su precio de coste según tu albarán." />
+    <meta name="theme-color" content="#DCEBFF" />
+    <link rel="manifest" href="/price-scanner-app/manifest.webmanifest" />
+    <link rel="icon" href="/price-scanner-app/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="/price-scanner-app/icons/icon-192.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="轻松管理" />
+    <script type="module" crossorigin src="/price-scanner-app/assets/index-C2L-Nmbd.js"></script>
+    <link rel="modulepreload" crossorigin href="/price-scanner-app/assets/tesseract-DLcktzgq.js">
+    <link rel="stylesheet" crossorigin href="/price-scanner-app/assets/index-ur6qtQ8S.css">
+  </head>
+  <body class="bg-[#DCEBFF]">
+    <div id="root"></div>
+    <script>
+      if ("serviceWorker" in navigator && !/localhost|127\.0\.0\.1/.test(location.hostname)) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/price-scanner-app/sw.js").catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>
