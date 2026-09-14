@@ -1,0 +1,51 @@
+{
+  "name": "轻松管理",
+  "short_name": "轻松管理",
+  "description": "Escanea el código de barras de un producto y consulta al instante su precio de coste según tu albarán.",
+  "start_url": "/price-scanner-app/",
+  "scope": "/price-scanner-app/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#DCEBFF",
+  "theme_color": "#DCEBFF",
+  "lang": "es",
+  "share_target": {
+    "action": "/price-scanner-app/share-target",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "files",
+          "accept": [
+            "application/pdf",
+            ".pdf",
+            "image/jpeg",
+            "image/png",
+            "image/webp",
+            "image/heic",
+            "image/heif",
+            ".jpg",
+            ".jpeg",
+            ".png",
+            ".webp",
+            ".heic",
+            ".heif",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "application/vnd.ms-excel",
+            ".xlsx",
+            ".xls"
+          ]
+        }
+      ]
+    }
+  },
+  "icons": [
+    { "src": "/price-scanner-app/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/price-scanner-app/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/price-scanner-app/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
