@@ -8,6 +8,9 @@
  *    cache grows ~3 MB per deploy forever, and under storage pressure the browser
  *    evicts the whole origin — IndexedDB (the delivery notes) included.
  */
+// Si alguna vez se edita a mano un asset sin cambiar su nombre (hash), hay que subir
+// este número: la caché es cache-first por nombre y si no, los móviles seguirían
+// usando la copia vieja para siempre.
 const CACHE = "price-scanner-v4";
 const SCOPE = "/price-scanner-app/";
 const SHELL_URL = SCOPE;
@@ -144,7 +147,7 @@ async function pruneStaleAssets(html) {
     let res = await cache.match(url);
     if (!res && url === entry) {
       // El script de entrada se va a necesitar igualmente; lo descargamos y cacheamos.
-      res = await fetch(url).catch(() => undefined);
+      res = await fetch(url, { cache: "no-cache" }).catch(() => undefined);
       if (res && res.ok) await cache.put(url, res.clone());
     }
     if (!res || !res.ok) continue;
@@ -236,7 +239,10 @@ self.addEventListener("fetch", (event) => {
     caches.match(req).then(
       (cached) =>
         cached ||
-        fetch(req).then((res) => {
+        // "no-cache": revalida con el servidor (ETag → 304 si no ha cambiado). GitHub Pages
+        // envía max-age=600, y sin esto un fichero recién parcheado podría salir de la caché
+        // HTTP del navegador con el contenido viejo y quedarse así guardado para siempre.
+        fetch(req, { cache: "no-cache" }).then((res) => {
           if (res.ok && res.type === "basic") {
             const copy = res.clone();
             caches.open(CACHE).then((cache) => cache.put(req, copy));
