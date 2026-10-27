@@ -1,268 +1,261 @@
 # Auditoría técnica — 轻松管理 (price-scanner-app)
 
-Revisión externa del build publicado (commit `03643ca`), octubre 2026.
+Revisión externa del build publicado (commit `03643ca`, publicado el 14/09/2026). Octubre de 2026.
 
-## Alcance y limitaciones
+## Resumen para el propietario
+
+- **Hecho:** más de 20 arreglos y mejoras aplicados directamente sobre el build publicado, todos probados en un
+  navegador real **contra la versión que usa hoy la tienda**. Están en la rama
+  `claude/bohao-mysql-credentials-b4ukuv`; **la tienda no ve nada hasta que se fusione en `main`.**
+- **Lo más importante que cambia para el usuario:** el OCR ya no pierde productos; los PDF con fuentes chinas y
+  los PDF escaneados con JPEG 2000 ahora se leen (antes, nada / página en blanco); la app avisa cuando la IA
+  falla o no tiene créditos; el escáner va fluido en iPhone; cada pantalla descarga hasta 745 KB menos; menos
+  riesgo de perder los albaranes guardados en el móvil.
+- **Pendiente de decidir por ti** (sección Seguridad): la copia de seguridad incluye la clave de precios; la
+  consulta de inventario no pide clave; la contraseña de desbloqueo no protege de verdad.
+- ⚠️ **Hay que portar estos cambios al código fuente** (tu carpeta local) antes de volver a compilar y publicar
+  desde ella, o se perderán. Ver "Cómo portar al código fuente".
+
+## Alcance y método
 
 - Este repositorio contiene **solo el build compilado** (Vite, minificado, sin source maps). El código fuente
-  está en el ordenador del propietario, fuera de GitHub, y no he tenido acceso a él.
-- A petición del propietario, los arreglos marcados **✅ APLICADO** se han hecho **directamente sobre el build
-  publicado**, con parches quirúrgicos probados (ver "Cambios aplicados" al final).
-- ⚠️ **Hay que portarlos al código fuente.** La próxima vez que se compile la app desde el código fuente y se
-  publique, estos parches desaparecen. Los fragmentos de cada punto sirven de guía (los nombres de función
-  son orientativos: en el minificado no se ven los originales). `sw.js` se copia tal cual a `public/sw.js`.
-- Las afirmaciones marcadas **[verificado]** se han comprobado ejecutando el código real del build; el resto
-  sale de leer el código.
-- No he podido ver la Edge Function de OCR (no está desplegada en los proyectos de Supabase accesibles), así
-  que no evalúo qué modelo usa ni su prompt.
-
-## Corrección importante: no existe OCR local (✅ textos corregidos)
-
-La ayuda de Ajustes dice *"si falla o está vacía, se usa el OCR local"*. **No es cierto.** Sin URL de IA y
-clave, la importación por foto muestra un error y no lee nada. No hay Tesseract en el build: el chunk
-`tesseract-*.js` son 236 bytes de un helper de compatibilidad CommonJS que Rollup nombró así por herencia.
-**[verificado]**
-
-✅ Corregidos los dos textos de Ajustes para que digan la verdad. Sigue pendiente decidir si se implementa un OCR local de verdad como respaldo.
-Mientras tanto, **sin la función `ocr-albaran` desplegada, la importación de albaranes por foto no funciona.**
+  está en el ordenador del propietario y no he tenido acceso a él.
+- Cada arreglo es un parche quirúrgico sobre el build. Para cada uno: el texto original debe aparecer
+  exactamente una vez (si no, no se aplica nada); comprobación de sintaxis; ESLint `no-undef` contra la línea
+  base de la versión publicada (0 referencias nuevas sin declarar); y prueba funcional. Las pruebas en
+  navegador ejecutan **lo mismo sobre la versión publicada y sobre la parcheada** para ver el antes/después.
+- **[verificado]** = comprobado ejecutando el código real. Lo demás sale de leer el código.
+- No he podido ver las Edge Functions (`ocr-albaran`, `inventario`, `precios`, `altas`): no están desplegadas
+  en los proyectos de Supabase accesibles. Lo que digo del servidor se deduce de lo que hace el cliente.
 
 ---
 
-## P0 — Riesgo de pérdida de datos o datos erróneos
+## 1. Datos e integridad
 
-### 1. ✅ APLICADO — La caché crece sin límite y el almacenamiento no es persistente → riesgo de borrar los albaranes
-- El service worker usaba siempre la misma caché (`price-scanner-v3`) y nunca borraba los assets de builds
-  anteriores: unos 3 MB por despliegue, acumulándose para siempre.
-- La app nunca llama a `navigator.storage.persist()`. En modo *best-effort*, cuando el navegador se queda sin
-  espacio **borra el origen entero, IndexedDB incluido**: todos los albaranes guardados en el móvil.
-- **Aplicado en `sw.js`:** en cada despliegue nuevo se borran los assets que el build actual ya no
-  referencia (recorre el grafo de dependencias desde `index.html`). Verificado sobre el build real: los 35
-  assets actuales son alcanzables y se conservan. **[verificado]**
-- **Aplicado en `index.html`** (y pendiente de portar al código fuente): pedir almacenamiento persistente al arrancar:
-  ```ts
-  // main.tsx, al arrancar
-  if (navigator.storage?.persist) {
-    navigator.storage.persisted().then((ok) => ok || navigator.storage.persist());
-  }
-  ```
-  En Chrome Android se concede sin preguntar si la PWA está instalada. Complementar con una exportación
-  periódica de la base de datos (botón "Copia de seguridad"): IndexedDB en un móvil no es un sitio seguro
-  para ser la única copia.
+### 1.1 ✅ La caché crecía sin límite y el almacenamiento no era persistente [verificado]
+El service worker no borraba nunca los ficheros de versiones anteriores (~3 MB por publicación) y la app no
+pedía almacenamiento persistente. Cuando el móvil se queda sin espacio, el navegador puede **borrar el origen
+entero, IndexedDB incluido: todos los albaranes**.
+- `sw.js`: en cada publicación borra lo que el build nuevo ya no usa (recorre el grafo de dependencias).
+  Comprobado contra el build real: conserva los 35 ficheros actuales.
+- `index.html`: pide almacenamiento persistente (en Chrome Android con la PWA instalada se concede solo).
+- La app ya tiene **copia de seguridad** (Ajustes → Exportar/Importar backup), bien hecha: valida el formato y
+  restaura en una transacción. Recomendación: hacer una copia periódica; un móvil no debe ser la única copia.
 
-### 2. ✅ APLICADO — La deduplicación del OCR borra líneas distintas en silencio **[verificado]**
-`OcrImportPage` deduplica las líneas entre páginas con la clave `código de barras | cantidad | total`. Dos
-artículos sin código de barras con la misma cantidad y total (muy habitual en bazar: docenas de artículos a
-1,20 €) se fusionan en uno. Con 3 líneas de prueba entran 3 y salen 2: "VASO CRISTAL" desaparece.
-```ts
-const lineKey = (l) =>
-  [normalize(l.barcode), normalize(l.reference), normalizeName(l.productName), l.quantity, l.lineTotal].join("|");
-```
-Mejor aún: deduplicar solo cuando el usuario añade **la misma foto dos veces** (hash del fichero), no por
-contenido.
+### 1.2 ✅ La deduplicación del OCR borraba artículos distintos [verificado]
+Las líneas se deduplicaban por `código de barras | cantidad | total`. Dos artículos sin código con la misma
+cantidad y total (muy habitual en bazar) se fusionaban. **Navegador: 3 artículos distintos → la versión
+publicada guarda 2.** Ahora la clave incluye referencia y nombre: guarda 3, y un duplicado real se sigue quitando.
 
-### 3. ✅ APLICADO — Los abonos con el menos al final pierden el signo **[verificado]**
-`parseMoney("5,00-")` devuelve **+5**. En albaranes españoles el menos final es habitual en abonos y
-descuentos, así que el total del albarán sale inflado. Parche (probado sobre el código real, 18/18 casos,
-regresiones incluidas):
-```ts
-const negative = /^-|-$|^\(.*\)$/.test(s);   // antes: /^-|^\(.*\)$/
-```
+### 1.3 ✅ Los abonos con el menos al final salían en positivo [verificado]
+`5,00-` (habitual en abonos y descuentos de albaranes españoles) se leía como +5. Corregido; 12/12 casos,
+incluidas regresiones.
 
-### 4. ✅ APLICADO — Una página de error podía quedar guardada como la app offline — **corregido en `sw.js`**
-Cada navegación guardaba la respuesta como shell offline **sin comprobar `res.ok`**. Un 404 o 5xx puntual de
-GitHub Pages quedaba como "la app" sin conexión. Ahora solo se guardan respuestas 200 de tipo HTML. **[verificado]**
+### 1.4 ✅ PDF con fuentes chinas: no se leía nada [verificado]
+pdf.js se usaba sin `cMapUrl`. Un PDF con texto en una fuente china no incrustada (codificación predefinida
+`UniGB-UCS2-H`, típica de programas de facturación chinos) se trataba como **"Este PDF es un escaneo"**: ni el
+chino, ni las palabras latinas, ni los números. El usuario acababa "leyéndolo como foto" → IA → coste.
+**Ahora extrae el texto completo y exacto** (`送货单 ALBARAN 2026/555`, `陶瓷杯子 TAZA CERAMICA 12 1,20 14,40`…),
+descargando solo los 2 ficheros de tabla que necesita.
 
----
+### 1.5 ✅ PDF escaneados con JPEG 2000: página en blanco [verificado] (JBIG2: muy probable)
+pdf.js 6 carga sus decodificadores de imagen en WebAssembly desde `wasmUrl`, que no se pasaba. Un albarán
+escaneado con imagen JPEG 2000 se convertía en **una página completamente en blanco** (0,0 % de píxeles
+oscuros) que se enviaba a la IA: se paga la llamada y no se lee nada. Ahora la página sale bien (el código de
+barras de la prueba se lee). JBIG2 —la compresión típica de los escáneres de oficina en blanco y negro— usa
+exactamente el mismo cargador, así que casi seguro le pasaba lo mismo; no lo he podido probar con un fichero
+JBIG2 real.
+- Añadida la carpeta `pdfjs/` con `cmaps`, `standard_fonts`, `wasm` e `iccs` de **pdfjs-dist 6.2.108** (la
+  versión exacta del build), sin modificar y con sus licencias. Solo se descargan cuando un PDF las necesita.
 
-## P1 — Coste y fiabilidad de la IA
+### 1.6 ✅ Una página de error podía quedarse como la app sin conexión [verificado]
+El service worker guardaba cualquier respuesta como shell offline, también un 404/503. Ahora solo guarda
+respuestas 200 HTML. Navegador: con GitHub Pages devolviendo 503, se sirve la app guardada.
 
-### 5. ✅ APLICADO — Los fallos de la IA en PDF se tragan en silencio
-En `PdfImportPage`, si la llamada a la IA falla (clave mala, **créditos agotados**, timeout), un
-`catch { return false }` cae al parser genérico de baja calidad sin decir por qué. El usuario ve resultados
-malos y no sabe que la IA no ha funcionado. Mostrar el error:
-```ts
-} catch (e) {
-  setWarning(`La lectura con IA ha fallado (${e.message}). Mostramos la lectura básica: revísala con cuidado.`);
-  return false;
-}
-```
+### 1.7 ✅ Riesgo de quedarse con un fichero viejo tras publicar [verificado]
+GitHub Pages envía `cache-control: max-age=600`. Un móvil que hubiera abierto la app en los 10 minutos previos
+a publicar se quedaba **para siempre** con la versión vieja de un fichero (la caché del SW va por nombre).
+Reproducido con un servidor que imita a GitHub Pages: sin el arreglo, el móvil guarda el fichero viejo; con
+él, el nuevo. El SW ahora revalida con el servidor al descargar (ETag → 304 si no ha cambiado).
 
-### 6. ✅ APLICADO — Reintentos ciegos: hasta 3 minutos de espera y posible triple coste
-La foto se reintenta 3 veces (esperas de 0/2/5 s), cada intento con 60 s de timeout, **ante cualquier error**,
-incluidos 400 y 401 (clave incorrecta), que nunca se arreglan reintentando. Si el gateway corta con 504
-después de que el modelo ya ha respondido, cada reintento se vuelve a cobrar. Reintentar solo errores de red,
-429 y 5xx:
-```ts
-class HttpError extends Error { constructor(msg: string, readonly status: number) { super(msg); } }
-const retryable = (e: unknown) => !(e instanceof HttpError) || e.status === 429 || e.status >= 500;
-// en el bucle: if (!retryable(err)) break;
-```
+## 2. IA: coste y fiabilidad
 
-### 7. ✅ APLICADO — Todas las páginas a la vez
-`Promise.all` procesa todas las fotos en paralelo: decodifica N fotos de 12 MP a la vez (~48 MB cada una en
-memoria) y lanza N llamadas simultáneas a la IA (más probabilidad de 429). En móviles modestos puede cerrar
-la pestaña. Limitar a 2 en paralelo:
-```ts
-async function mapLimit<T, R>(items: T[], limit: number, fn: (x: T, i: number) => Promise<R>) {
-  const out: R[] = new Array(items.length); let next = 0;
-  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, async () => {
-    while (next < items.length) { const i = next++; out[i] = await fn(items[i], i); }
-  }));
-  return out;
-}
-```
+### 2.1 ✅ Los fallos de la IA se tragaban en silencio (PDF) [verificado]
+Si la IA fallaba (clave mala, **créditos agotados**, timeout) se mostraba una lectura básica peor sin decir por
+qué. Ahora: *"La lectura con IA ha fallado (motivo). Mostramos la lectura básica: revísala con cuidado."*
 
-### 8. ✅ APLICADO — Alta de producto con foto: sin timeout
-`photoFill` llama a `/alta-foto` sin `AbortController` (el OCR sí tiene 60 s). Con Wi-Fi mala se queda
-"Enviando…" indefinidamente. Además lee `res.json()` antes de mirar `res.ok`, así que un 502 en HTML acaba
-mostrando "¿conexión?", que es engañoso.
+### 2.2 ✅ Reintentos ciegos ante errores que no se arreglan reintentando [verificado]
+Se reintentaba 3 veces cualquier error, también 401 (clave incorrecta). **Navegador: 3 llamadas y 8,7 s hasta
+ver el error → 1 llamada y 0,8 s.** Los errores temporales (408, 429, 5xx, red) se siguen reintentando
+(comprobado: 500, 500, OK → se lee).
 
-### 9. La misma clave autoriza cambiar precios y usar la IA
-El OCR se autentica con `priceAdminKey`, la "clave para cambiar precios", que vive en el móvil de cada
-dependiente. Quien la tenga puede cambiar PVP en la caja, no solo leer albaranes. Separar claves (una de
-lectura/OCR y otra de precios) o, al menos, que sea una por tienda y se pueda revocar.
+### 2.3 ✅ Todas las páginas a la vez [verificado]
+Ahora máximo 2 fotos en paralelo (menos memoria en móviles modestos y menos riesgo de límite de peticiones).
 
-### 9b. El "modo completo" solo se protege en el navegador
-La contraseña que desbloquea importar y los ajustes avanzados se comprueba en el propio navegador, y el
-resultado se guarda en el almacenamiento local. Cualquiera con el móvil en la mano y conocimientos básicos
-puede activar ese modo sin la contraseña. No es grave mientras las acciones con efecto real (cambiar precios,
-usar la IA) exijan la clave en el servidor, que es lo que de verdad protege. Pero conviene no tratar esa
-contraseña como una medida de seguridad, solo como una forma de que los dependientes no toquen lo que no deben.
+### 2.4 ✅ Mensajes de error engañosos [verificado]
+Alta con foto, cambio de precio y alta de producto mostraban "sin conexión" ante cualquier respuesta que no
+fuera JSON (p. ej. un 502). Ahora muestran el error real. El alta con foto, además, tenía espera infinita:
+ahora 60 s.
 
-### 10. Tamaño de imagen enviado a la IA: correcto, no tocar
-La app envía JPEG de hasta 2200 px. Los modelos actuales de Claude procesan hasta 2576 px en el lado largo,
-y un albarán es texto denso, así que **no conviene reducirlo**. Coste aproximado: ~4.600 tokens de entrada
-por página (un token por cada parche de 28×28 px). El coste por página depende del modelo que use la Edge
-Function, que no he podido ver.
+### 2.5 Tamaño de la foto enviada a la IA: correcto, no tocar
+JPEG de hasta 2200 px. Los modelos actuales de Claude procesan hasta 2576 px en el lado largo y un albarán es
+texto denso. Coste aproximado: ~4.600 tokens de entrada por página.
 
----
+## 3. Rendimiento
 
-## P2 — Rendimiento
+### 3.1 ✅ El escáner bloqueaba la interfaz en iPhone [verificado]
+En móviles sin detector nativo (iPhone/Safari), zxing analizaba cada fotograma en modo `TRY_HARDER`: **504 ms
+por fotograma vacío** (lo normal mientras apuntas). Medido con cámara simulada en Chromium:
 
-### 11. ✅ APLICADO — Trabajo de imagen que se calcula y se tira **[verificado]**
-`preprocess` convierte cada foto a escala de grises, estira el contraste y la codifica en **PNG**
-(`toDataURL`, síncrono, en el hilo principal). Ese resultado **no lo usa nadie**: tanto el OCR como el alta
-con foto envían `originalUrl`, el JPEG. Es CPU y memoria malgastadas en cada foto, con la interfaz
-bloqueada. Eliminar ese bloque y cerrar el bitmap tras dibujarlo (`bitmap.close()`).
+| Escáner | Publicada (hoy) | Ahora |
+|---|---|---|
+| Apuntando sin código: interfaz bloqueada | 83 % (picos de 796 ms) | **23 %** (picos de 108 ms) |
+| Fotogramas analizados por segundo | 1,7 | **6,8** |
+| Código que se enfoca: tiempo hasta leer | 2,9 s | **2,7 s** |
+| Código vertical (botella/lata) | 0,8 s | **0,7 s** |
 
-### 12. El escáner descarga xlsx (333 KB) sin necesitarlo
-Cadena: `ScanPage → ScanResultSheet → productCreations → inventoryService → xlsx`. `inventoryService`
-importa `xlsx` de forma estática solo para leer inventarios en Excel. Cambiarlo a import dinámico dentro de
-esa función:
-```ts
-async function readInventoryFile(file: File) {
-  const XLSX = await import("xlsx");
-  ...
-}
-```
+Método: el único caso que solo resolvía `TRY_HARDER` en vídeo realista era el **código vertical** (ni el
+desenfoque ni el contraste cambiaban nada: lo que lee uno lo lee el otro). Así que el escaneo continuo usa el
+modo rápido y, si un fotograma falla, uno de cada dos se reintenta **girado 90°** en modo rápido (~15 ms en vez
+de ~500). "Leer código de una foto" mantiene `TRY_HARDER` (una sola imagen, el coste da igual). En Android con
+detector nativo no cambia nada.
 
-### 13. El escáner descarga zxing (411 KB) aunque el móvil tenga detector nativo
-En Android con Chrome se usa `BarcodeDetector` nativo, pero zxing se descarga igual porque se importa
-estáticamente. Cargarlo solo cuando no hay detector nativo:
-```ts
-const detector = await createNativeDetector();
-const reader = detector ? null : await import("@zxing/library").then(createZxingReader);
-```
-Entre #12 y #13, abrir `/escanear` en Android pasa de unos 745 KB extra a cero.
+### 3.2 ✅ Librerías descargadas sin necesidad [verificado]
+- **xlsx (333 KB)** se descargaba en 10 pantallas (escáner, OCR, PDF, búsqueda, producto, catálogo…) y solo
+  se usa para leer un Excel. Ahora solo en las dos pantallas de importar Excel.
+- **zxing (411 KB)** se descargaba siempre; ahora solo si el móvil no tiene detector nativo.
+- Abrir el escáner: **745 KB menos en Android, 333 KB menos en iPhone.** Comprobado que importar el Excel de
+  ejemplo da el mismo resultado (9 productos) y que la cámara y la foto leen el código igual.
 
-### 14. En iPhone, zxing bloquea el hilo principal
-Safari no tiene `BarcodeDetector`, así que en iPhone corre zxing con `TRY_HARDER` y 8 formatos sobre un
-canvas de 1280 px cada 90 ms, en el hilo principal: batería y calor en un uso de todo el día. Opciones, de
-menor a mayor esfuerzo: quitar `TRY_HARDER` en la primera pasada; reducir formatos a EAN-13/EAN-8/UPC (lo que
-llevan los productos de bazar); mover la decodificación a un Web Worker con `OffscreenCanvas`.
+### 3.3 ✅ Trabajo de imagen que se calculaba y se tiraba [verificado]
+Cada foto se convertía a escala de grises con contraste y PNG de 3,6 MP en el hilo principal, y ese resultado
+no lo usaba nadie. Eliminado; se libera además el bitmap.
 
-### 15. La búsqueda recorre la tabla entera en cada consulta
-Salvo las búsquedas por prefijo de código de barras o de referencia (que usan índice), buscar por nombre o
-por un número corto hace `productLines.toArray()`: toda la tabla en memoria, una vez por búsqueda (con
-debounce de 200 ms). Con pocos miles de líneas va bien; si la base crece mucho (decenas de miles), conviene
-un índice multientrada de palabras del nombre (`*nameWords`) en Dexie. **Prioridad baja.**
-*(Corrección: una versión anterior de este informe decía que la tabla se leía dos veces por búsqueda. No es
-así: la normalización de referencias deja solo dígitos, así que los dos recorridos se excluyen entre sí.
-Comprobado con 900 búsquedas sobre el código real.)*
+### 3.4 La búsqueda recorre la tabla entera en cada consulta — prioridad baja
+Por nombre o número corto hace `productLines.toArray()` una vez por búsqueda (con debounce de 200 ms). Bien
+con pocos miles de líneas; si crece mucho, índice multientrada de palabras del nombre en Dexie.
+*(Corrección: una versión anterior de este informe decía "dos veces". No es así: comprobado con 900 búsquedas.)*
 
-### 16. PDF con fuentes chinas: probable lectura defectuosa (verificar)
-pdf.js se usa sin `cMapUrl` ni `standardFontDataUrl`. Los PDF con fuentes CJK que dependen de CMaps
-predefinidos (frecuentes en mayoristas chinos) pueden extraer texto vacío o corrupto. Eso empuja el documento
-a la IA, que cuesta, o deja un resultado malo. Copiar `pdfjs-dist/cmaps/` y `standard_fonts/` a `public/` y
-configurar `cMapUrl`, `cMapPacked: true` y `standardFontDataUrl`. **Probar antes con un albarán PDF real de
-un proveedor chino.**
+## 4. Seguridad — decisiones tuyas (no aplicado)
 
-### 17. Compartir varios PDF: solo se procesa el primero
-El share target acepta varios ficheros, pero `PdfImportPage` solo lee `files[0]`; el resto se ignora sin
-avisar.
+### 4.1 La consulta de inventario no pide clave
+La ficha de producto consulta `inventario?barcode=…` **sin clave** (el catálogo y los cambios de precio sí la
+envían). Para que la app funcione, ese endpoint responde sin autenticación con **coste, PVP y stock** a
+cualquiera que tenga la URL. Recomendación: exigir la clave también ahí (cambio en servidor + 1 línea en la app).
+
+### 4.2 La misma clave sirve para cambiar precios y para la IA
+Quien tenga la "clave para cambiar precios" (en el móvil de cada dependiente) puede cambiar PVP en la caja.
+Recomendación: claves separadas, una por tienda, revocables.
+
+### 4.3 La copia de seguridad incluye la clave de precios [verificado en el código]
+"Exportar backup" guarda los ajustes completos, clave incluida. Si el fichero se envía por WhatsApp o correo,
+la clave va dentro. Recomendación: quitarla de la exportación (al restaurar en otro móvil habría que volver a
+escribirla). No lo he cambiado porque altera cómo funciona la restauración.
+
+### 4.4 La contraseña de desbloqueo no protege de verdad
+El "modo completo" se comprueba en el navegador y se guarda en almacenamiento local: se puede activar sin la
+contraseña con conocimientos básicos. Además, su hash (SHA rápido, sin sal) está en el código público, así que
+una contraseña corta o común se puede adivinar sin conexión. No es grave mientras lo que tiene efecto real
+exija la clave en el servidor, pero: **no reutilices esa contraseña en ningún otro sitio** (TPV, Supabase,
+correo…) y no la trates como medida de seguridad.
+
+## 5. Menores
+
+- ✅ Fechas imposibles en la cabecera de PDF (`45/13/2026`, 31 de febrero, año de 3 cifras): ahora se validan
+  contra el calendario (bisiestos incluidos); si no existe, queda vacía. [verificado, 9/9]
+- ✅ Los textos de Ajustes prometían un "OCR local" que no existe. Corregidos. Sigue pendiente decidir si se
+  implementa un OCR local de verdad como respaldo: **hoy, sin la función `ocr-albaran`, no se leen fotos.**
+- ✅ Compartir varios PDF: solo se lee el primero; ahora lo avisa.
+- ✅ Tras publicar, una pestaña abierta que pide un fichero que ya no existe recarga una vez (sin bucle).
+- Separador de miles `1.234`: **no aplicado, a propósito.** La importación de Excel lee las celdas numéricas
+  como números, así que solo afectaría a texto; y en un Excel en formato inglés `1.250` es 1,25 €.
+- Zoom bloqueado (`user-scalable=no`): no cambiado; quitarlo puede hacer que el iPhone amplíe al tocar un campo.
+
+## 6. Revisado y correcto (sin cambios)
+
+- **Redondeo de precios "bazar"** [verificado con todos los costes de 0,01 € a 50 €]: con los multiplicadores
+  que ofrece la app (x1,9 en adelante) nunca da un precio por debajo del coste, y el margen medio sale
+  exactamente el objetivo a partir de 0,50 € de coste. Solo con multiplicadores personalizados muy bajos
+  (x1,1–x1,3) y artículos de céntimos puede quedar por debajo.
+- **Ficha de producto si la caja falla** [verificado]: 500 → datos locales; "no existe" → "no encontrado";
+  existe → dato de la caja.
+- PDF primero por texto con parsers locales; la IA solo si no hay seguridad, y con texto (barato).
+- Escáner: detector nativo, recorte central, filtro de lecturas repetidas, evita la cámara ultra gran angular.
+- Datos: transacciones Dexie, normalización, validación de coherencia precio/descuento/total.
+- Reemplazar el inventario pide confirmación. Casi todas las llamadas de red llevan timeout.
 
 ---
-
-## P3 — Menores
-
-- ✅ **APLICADO — Fechas imposibles:** el extractor de cabecera de PDF aceptaba `45/13/2026` (→ `2026-13-45`), el 31 de febrero o años de 3 cifras (`12/12/202` → `202-12-12`). Ahora valida contra el calendario real (bisiestos incluidos); si la fecha no existe, queda vacía y el usuario la elige.
-- **Separador de miles `1.234`** **[verificado]**: hoy se lee como 1,234. Con el parche del punto 3 (regla:
-  un único punto, exactamente 3 decimales y parte entera distinta de 0 → miles) se lee 1.234 y `0.125` sigue
-  siendo 0,125. Es una decisión de criterio: un Excel en formato inglés con precio `1.250` pasaría a leerse
-  como 1.250 €. Aplicarlo solo si los documentos son siempre en formato español.
-- ✅ **APLICADO — Tras publicar, una pestaña abierta puede fallar al cargar un chunk viejo.** Ahora recarga
-  sola una vez (como mucho cada 30 s, sin bucle).
-- **Accesibilidad:** `user-scalable=no, maximum-scale=1` impide hacer zoom. Quitarlo de `index.html`.
-- **Comentarios desfasados** en `sw.js` (Tesseract por CDN, "Edge Functions en el mismo origen"):
-  corregidos en este cambio.
-
----
-
-## Lo que está bien hecho
-
-- **PDF primero por texto:** lee la capa de texto con pdf.js, detecta el perfil de proveedor con parsers
-  locales y solo llama a la IA si el parser no está seguro. Y le envía texto, no imagen: mucho más barato.
-- **Escáner:** prefiere el detector nativo, recorta una franja central, reduce resolución, filtra lecturas
-  repetidas y evita la cámara ultra gran angular.
-- **Datos:** transacciones Dexie, `bulkAdd`, normalización al guardar y validación de coherencia entre
-  precio, descuento y total, con nivel de confianza por línea.
-- **Heurística de precio por pack** (×10/×100/×1000) para corregir precios unitarios mal escalados.
 
 ## Cambios aplicados
 
-Sobre el build publicado (commit `03643ca`), en la rama `claude/bohao-mysql-credentials-b4ukuv`.
-**Nada de esto llega a la tienda hasta que se fusione en `main`.**
-
 | Fichero | Cambio |
 |---|---|
-| `sw.js` | Poda de assets obsoletos por despliegue; no guarda respuestas de error como app offline; timeout de 4 s en la navegación con respaldo en caché; precache sin caché HTTP; al descargar un fichero que no tiene, lo revalida con el servidor (GitHub Pages envía `max-age=600` y, sin esto, un móvil que abriera la app en los 10 min previos a publicar se quedaría con el fichero viejo para siempre); quitada la regla muerta de CDN; caché `v4` (limpia de una vez lo acumulado en `v3` y obliga a descargar los ficheros parcheados). |
-| `index.html` | Pide almacenamiento persistente; recarga una vez si falta un chunk tras publicar. |
-| `parse-*.js` | Abonos con menos final (`5,00-`) en negativo. |
-| `OcrImportPage-*.js` | Deduplicación con referencia y nombre; no reintenta errores 4xx; máximo 2 páginas en paralelo. |
-| `OcrLoader-*.js` | Los errores HTTP llevan su código de estado (para decidir si reintentar). |
-| `PdfImportPage-*.js` | Avisa cuando falla la IA; valida la fecha de cabecera contra el calendario. |
-| `photoFill-*.js` | Alta con foto: timeout de 60 s y error real si el servidor no devuelve JSON. |
-| `preprocess-*.js` | Quitado el procesado en escala de grises + PNG que nadie usaba; libera el bitmap. |
-| `SettingsPage-*.js` | Textos de ayuda corregidos (no hay OCR local). |
+| `sw.js` | Poda por publicación; no guarda errores como app offline; timeout de 4 s en navegación; revalida ficheros al descargarlos; caché `v4`; quitada regla muerta de CDN. |
+| `index.html` | Almacenamiento persistente; recarga una vez si falta un chunk tras publicar. |
+| `pdfjs/` (nuevo) | Recursos de pdf.js 6.2.108: `cmaps`, `standard_fonts`, `wasm`, `iccs` (+ licencias). |
+| `PdfImportPage-*.js` | `getDocument` con `cMapUrl`, `standardFontDataUrl`, `wasmUrl`, `iccUrl`; aviso de fallo de IA; fechas válidas; aviso de varios PDF; sin precarga de xlsx. |
+| `ScanPage-*.js` | Escaneo continuo rápido + pasada girada 90°; zxing bajo demanda; sin precarga de xlsx. |
+| `OcrImportPage-*.js` | Deduplicación con referencia y nombre; no reintenta 4xx; máx. 2 páginas en paralelo. |
+| `OcrLoader-*.js` | Los errores HTTP llevan su código de estado. |
+| `inventoryService-*.js` | xlsx se carga solo al leer un Excel. |
+| `index-*.js` | Mapa de precargas: xlsx solo en las pantallas de Excel; zxing fuera del escáner. |
+| `parse-*.js` | Abonos con menos final. |
+| `photoFill-*.js`, `productCreations-*.js` | Timeout en alta con foto; errores reales del servidor. |
+| `preprocess-*.js` | Quitado el procesado que nadie usaba; libera el bitmap. |
+| `SettingsPage-*.js` | Textos corregidos (no hay OCR local). |
+| 8 pantallas más | Quitada la precarga de xlsx. |
 
-No aplicado sobre el build (requiere el código fuente o una decisión): #9 claves separadas, #12–#14 carga
-diferida de xlsx/zxing y escáner en iPhone, #15 búsqueda, #16 fuentes CJK en PDF, #17 varios PDF, separador
-de miles `1.234`, zoom bloqueado (quitarlo puede hacer que el iPhone amplíe al tocar un campo).
+## Pruebas
 
-### Pruebas
-
-**En navegador real (Chromium), misma prueba sobre la versión publicada y la parcheada,** con un servidor de
-IA simulado:
+Ejecutadas sobre el resultado final. **Navegador real (Chromium)**, misma prueba sobre la versión publicada y la
+parcheada, con servidor de IA simulado:
 
 | Prueba | Publicada (hoy) | Parcheada |
 |---|---|---|
-| OCR de 3 páginas, 3 artículos distintos (2 con misma cantidad y total) | **2 productos** (pierde uno) | **3 productos** |
-| Páginas enviadas a la IA a la vez | 3 | 2 |
-| Clave incorrecta (401): llamadas / tiempo hasta ver el error | 3 / 8,7 s | **1 / 0,8 s** |
-| Error temporal (500, 500, OK) | 3 llamadas, leído | 3 llamadas, leído (sin cambios) |
+| OCR, 3 artículos distintos (2 con misma cantidad y total) | 2 productos | **3** |
+| Clave de IA incorrecta (401) | 3 llamadas, 8,6 s | **1 llamada, 0,8 s** |
+| Error temporal (500, 500, OK) | se lee | se lee |
 | PDF con la IA sin créditos | no avisa | **avisa** |
+| PDF con fuentes chinas | "es un escaneo", 0 texto | **texto completo** |
+| PDF escaneado JPEG 2000 → "leer como foto" | página en blanco | **página correcta** |
+| Varios PDF compartidos | no avisa | **avisa** |
+| ¿Descarga xlsx? (7 pantallas) | en todas | solo en importar Excel |
+| Escáner con detector nativo: zxing / xlsx | sí / sí | **no / no** |
+| Cámara lee EAN-13 / foto de un código / Excel de ejemplo | sí / sí / 9 | sí / sí / 9 |
+| Ficha de producto con la caja caída | datos locales | datos locales |
 | 12 pantallas: errores JavaScript | 0 | 0 |
 
 **Service worker en Chromium real:** un móvil con la versión publicada (`v3`) se actualiza solo a `v4` y la
-caché vieja desaparece; la app abre sin conexión; si GitHub Pages devuelve 503 se sirve la app guardada y el
-503 no la sustituye; si tras publicar falta un fichero, recarga una vez y no entra en bucle. 8/8. Además, con un servidor que envía
-`max-age=600` como GitHub Pages: un móvil que abrió la versión publicada justo antes de publicar acaba con el
-fichero **parcheado**; con el `sw.js` sin la revalidación (control) se quedaba con el **viejo**.
+caché vieja desaparece; abre sin conexión; con 503 de GitHub Pages sirve la app guardada; si falta un fichero
+recarga una vez y no entra en bucle; con caché HTTP de 10 min guarda el fichero nuevo (control sin el arreglo:
+el viejo). 9/9.
 
-**Pruebas aisladas con el código real:** parser de importes 18/18 (incluidas regresiones); fecha de cabecera
-9/9 (incluidos bisiestos); service worker con `Cache`/`fetch` simulados 14/14; poda contra los 35 assets del
-build real.
+**Aisladas con el código real:** parser de importes 12/12; fechas 9/9; service worker simulado 14/14; mensajes
+de error 4/4; poda contra los 35 ficheros del build; ESLint sin referencias nuevas sin declarar.
 
-**No probado:** en un móvil físico (cámara, PWA instalada, permiso de almacenamiento persistente, que en
-Chromium sin interfaz no se concede) ni el timeout del alta con foto (60 s). Antes de fusionar en `main`,
-abrir la rama en un móvil y hacer una importación real.
+**No probado:** en un móvil físico (cámara real, iPhone, PWA instalada, permiso de almacenamiento persistente);
+un PDF JBIG2 real; el timeout de 60 s del alta con foto. Antes de fusionar: abrir la app en un móvil y hacer una
+importación real de foto y de PDF.
+
+## Cómo portar al código fuente
+
+Antes de volver a compilar desde la carpeta local, aplicar en el código fuente (las búsquedas se hacen por el
+texto de los mensajes, que no cambia al compilar):
+
+1. Copiar `sw.js` a `public/sw.js` y la carpeta `pdfjs/` a `public/pdfjs/`.
+2. `index.html`: el bloque de `navigator.storage.persist()` y `vite:preloadError`.
+3. Donde se llama a `getDocument`: añadir `cMapUrl`, `cMapPacked: true`, `standardFontDataUrl`, `wasmUrl`,
+   `iccUrl` (rutas de `public/pdfjs/`).
+4. Parser de importes: `/^-|-$|^\(.*\)$/` para detectar negativos.
+5. Importación por foto: clave de deduplicación con referencia y nombre; no reintentar 4xx salvo 408/429;
+   máximo 2 páginas en paralelo (y que el error HTTP lleve `status`).
+6. Importación PDF: mostrar el error de la IA (acumulando mensajes); validar la fecha con `new Date(...)`;
+   avisar si hay más de un PDF.
+7. Escáner: lector sin `TRY_HARDER` en el bucle continuo + reintento con el fotograma girado 90° cada dos
+   fallos; `import()` de zxing solo si no hay `BarcodeDetector`.
+8. `import("xlsx")` dinámico dentro de la función que lee el Excel.
+9. Preprocesado de foto: quitar el bloque de escala de grises + PNG; `bitmap.close()`.
+10. `res.json().catch(() => null)` en alta con foto, cambio de precio y alta; timeout en alta con foto.
+11. Textos de Ajustes sobre el OCR local.
+
+Si en el futuro se vuelve a editar a mano un fichero de `assets/` sin cambiar su nombre, subir `CACHE` en `sw.js`.
