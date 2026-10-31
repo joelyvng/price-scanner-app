@@ -46,6 +46,10 @@ entero, IndexedDB incluido: todos los albaranes**.
 Las líneas se deduplicaban por `código de barras | cantidad | total`. Dos artículos sin código con la misma
 cantidad y total (muy habitual en bazar) se fusionaban. **Navegador: 3 artículos distintos → la versión
 publicada guarda 2.** Ahora la clave incluye referencia y nombre: guarda 3, y un duplicado real se sigue quitando.
+*Corrección (31/10): la primera versión de este arreglo usaba siempre referencia y nombre, y duplicaba una línea
+leída en dos fotos solapadas con el nombre algo distinto ("9CM" / "9 CM"): 3 artículos → 4. Lo notaron en la
+tienda. Ahora: con código de barras se deduplica como antes (código + cantidad + total); sin código, con
+referencia y nombre. Probado en navegador contra las dos versiones anteriores en 4 escenarios.*
 
 ### 1.3 ✅ Los abonos con el menos al final salían en positivo [verificado]
 `5,00-` (habitual en abonos y descuentos de albaranes españoles) se leía como +5. Corregido; 12/12 casos,
@@ -85,7 +89,9 @@ Si la IA fallaba (clave mala, **créditos agotados**, timeout) se mostraba una l
 qué. Ahora: *"La lectura con IA ha fallado (motivo). Mostramos la lectura básica: revísala con cuidado."*
 
 ### 2.2 ✅ Reintentos ciegos ante errores que no se arreglan reintentando [verificado]
-Se reintentaba 3 veces cualquier error, también 401 (clave incorrecta). **Navegador: 3 llamadas y 8,7 s hasta
+Se reintentaba 3 veces cualquier error, también 401 (clave incorrecta). *Corrección (31/10): la primera versión dejaba de reintentar todos los 4xx; si la función devuelve un 4xx en
+un fallo pasajero (p. ej. respuesta de la IA mal formada), esa página se perdía. Ahora solo se deja de
+reintentar con 401/403.* **Navegador: 3 llamadas y 8,7 s hasta
 ver el error → 1 llamada y 0,8 s.** Los errores temporales (408, 429, 5xx, red) se siguen reintentando
 (comprobado: 500, 500, OK → se lee).
 
