@@ -11,7 +11,7 @@
 // Si alguna vez se edita a mano un asset sin cambiar su nombre (hash), hay que subir
 // este número: la caché es cache-first por nombre y si no, los móviles seguirían
 // usando la copia vieja para siempre.
-const CACHE = "price-scanner-v5";
+const CACHE = "price-scanner-v6";
 const SCOPE = "/price-scanner-app/";
 const SHELL_URL = SCOPE;
 const SHELL = [SHELL_URL, `${SCOPE}manifest.webmanifest`, `${SCOPE}icons/icon-192.png`, `${SCOPE}icons/icon-512.png`];
