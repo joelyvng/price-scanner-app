@@ -95,6 +95,20 @@ reintentar con 401/403.* **Navegador: 3 llamadas y 8,7 s hasta
 ver el error → 1 llamada y 0,8 s.** Los errores temporales (408, 429, 5xx, red) se siguen reintentando
 (comprobado: 500, 500, OK → se lee).
 
+### 2.2b ✅ Columnas desplazadas en la lectura de la IA [verificado]
+Con fotos malas, la IA a veces no lee un valor de una columna (p. ej. una cantidad) y "rellena" con el de la
+línea siguiente: desde ahí todo queda corrido una posición. No lo causa la app: se comprobó que la foto enviada
+a la IA es idéntica byte a byte a la de la versión original. Ahora, al recibir la respuesta, la app comprueba
+**cantidad × precio = importe** (y **precio × (1 − descuento) = precio final**) en todas las líneas a la vez; si
+una hipótesis "esta columna está corrida desde la línea k" hace cuadrar al menos 2 líneas más **sin estropear
+ninguna que ya cuadraba**, la aplica, deduce el valor que faltaba y marca esas líneas con una nota para revisar.
+- 20.000 albaranes simulados con una columna corrida: 88 % quedan exactamente bien, 12 % sin tocar (como antes,
+  sobre todo si el fallo está en las 2 últimas líneas), **0 % peor**. Lecturas correctas: 100 % intactas.
+  Líneas erróneas que pasaban sin ningún aviso: de 6.786 a 1.062.
+- Limitación: si lo que se corre es la columna de **nombres** respecto a los números, la aritmética no lo
+  detecta. Para eso hay que mejorar la instrucción de la función `ocr-albaran` (leer fila a fila y devolver
+  `null` en las celdas ilegibles en vez de rellenar con la siguiente).
+
 ### 2.3 ✅ Todas las páginas a la vez [verificado]
 Ahora máximo 2 fotos en paralelo (menos memoria en móviles modestos y menos riesgo de límite de peticiones).
 
