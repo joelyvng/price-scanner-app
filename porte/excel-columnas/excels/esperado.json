@@ -1,0 +1,438 @@
+{
+ "es-cabeceras-raras": {
+  "columnas": {
+   "barcode": 0,
+   "productName": 1,
+   "quantity": 2,
+   "unitPrice": 3,
+   "discountPercent": 4,
+   "lineTotal": 5
+  },
+  "lineas": [
+   {
+    "barcode": "8480730215738",
+    "productName": "TAZA CERAMICA 9CM",
+    "quantity": 24,
+    "unitPrice": 4.06,
+    "discountPercent": 5,
+    "finalUnitPrice": 3.86,
+    "lineTotal": 92.64
+   },
+   {
+    "barcode": "8403642621299",
+    "productName": "VASO CRISTAL 25CL",
+    "quantity": 10,
+    "unitPrice": 8.29,
+    "discountPercent": 0,
+    "finalUnitPrice": 8.29,
+    "lineTotal": 82.9
+   },
+   {
+    "barcode": "8400332245384",
+    "productName": "PLATO HONDO",
+    "quantity": 24,
+    "unitPrice": 6.84,
+    "discountPercent": 0,
+    "finalUnitPrice": 6.84,
+    "lineTotal": 164.16
+   },
+   {
+    "barcode": "8436405622417",
+    "productName": "JARRA AGUA 1L",
+    "quantity": 36,
+    "unitPrice": 9.5,
+    "discountPercent": 0,
+    "finalUnitPrice": 9.5,
+    "lineTotal": 342.0
+   },
+   {
+    "barcode": "8495145475271",
+    "productName": "CESTA MIMBRE",
+    "quantity": 6,
+    "unitPrice": 4.73,
+    "discountPercent": 0,
+    "finalUnitPrice": 4.73,
+    "lineTotal": 28.38
+   },
+   {
+    "barcode": "8440560865695",
+    "productName": "VELA AROMATICA",
+    "quantity": 12,
+    "unitPrice": 10.66,
+    "discountPercent": 0,
+    "finalUnitPrice": 10.66,
+    "lineTotal": 127.92
+   },
+   {
+    "barcode": "8493137585847",
+    "productName": "MARCO FOTO 10X15",
+    "quantity": 1,
+    "unitPrice": 6.96,
+    "discountPercent": 0,
+    "finalUnitPrice": 6.96,
+    "lineTotal": 6.96
+   },
+   {
+    "barcode": "8440613589523",
+    "productName": "RELOJ PARED",
+    "quantity": 12,
+    "unitPrice": 1.89,
+    "discountPercent": 5,
+    "finalUnitPrice": 1.8,
+    "lineTotal": 21.6
+   }
+  ]
+ },
+ "chino": {
+  "columnas": {
+   "barcode": 0,
+   "productName": 1,
+   "quantity": 2,
+   "unitPrice": 3,
+   "lineTotal": 4
+  },
+  "lineas": [
+   {
+    "barcode": "8481454212478",
+    "productName": "TAZA CERAMICA 9CM",
+    "quantity": 6,
+    "unitPrice": 4.35,
+    "finalUnitPrice": 4.35,
+    "lineTotal": 26.1
+   },
+   {
+    "barcode": "8419860395478",
+    "productName": "VASO CRISTAL 25CL",
+    "quantity": 3,
+    "unitPrice": 10.89,
+    "finalUnitPrice": 10.89,
+    "lineTotal": 32.67
+   },
+   {
+    "barcode": "8400753292615",
+    "productName": "PLATO HONDO",
+    "quantity": 36,
+    "unitPrice": 6.5,
+    "finalUnitPrice": 6.5,
+    "lineTotal": 234.0
+   },
+   {
+    "barcode": "8420642792873",
+    "productName": "JARRA AGUA 1L",
+    "quantity": 3,
+    "unitPrice": 6.69,
+    "finalUnitPrice": 6.69,
+    "lineTotal": 20.07
+   },
+   {
+    "barcode": "8457447621688",
+    "productName": "CESTA MIMBRE",
+    "quantity": 12,
+    "unitPrice": 10.43,
+    "finalUnitPrice": 10.43,
+    "lineTotal": 125.16
+   },
+   {
+    "barcode": "8475217488859",
+    "productName": "VELA AROMATICA",
+    "quantity": 3,
+    "unitPrice": 9.52,
+    "finalUnitPrice": 9.52,
+    "lineTotal": 28.56
+   },
+   {
+    "barcode": "8459045847446",
+    "productName": "MARCO FOTO 10X15",
+    "quantity": 2,
+    "unitPrice": 11.85,
+    "finalUnitPrice": 11.85,
+    "lineTotal": 23.7
+   }
+  ]
+ },
+ "ingles": {
+  "columnas": {
+   "productName": 0,
+   "barcode": 1,
+   "quantity": 2,
+   "unitPrice": 3,
+   "lineTotal": 4
+  },
+  "lineas": [
+   {
+    "barcode": "8490784547488",
+    "productName": "TAZA CERAMICA 9CM",
+    "quantity": 6,
+    "unitPrice": 9.85,
+    "finalUnitPrice": 9.85,
+    "lineTotal": 59.1
+   },
+   {
+    "barcode": "8455456527557",
+    "productName": "VASO CRISTAL 25CL",
+    "quantity": 36,
+    "unitPrice": 10.2,
+    "finalUnitPrice": 10.2,
+    "lineTotal": 367.2
+   },
+   {
+    "barcode": "8423574162998",
+    "productName": "PLATO HONDO",
+    "quantity": 12,
+    "unitPrice": 2.39,
+    "finalUnitPrice": 2.39,
+    "lineTotal": 28.68
+   },
+   {
+    "barcode": "8464984032976",
+    "productName": "JARRA AGUA 1L",
+    "quantity": 12,
+    "unitPrice": 10.08,
+    "finalUnitPrice": 10.08,
+    "lineTotal": 120.96
+   },
+   {
+    "barcode": "8432073202159",
+    "productName": "CESTA MIMBRE",
+    "quantity": 24,
+    "unitPrice": 9.86,
+    "finalUnitPrice": 9.86,
+    "lineTotal": 236.64
+   },
+   {
+    "barcode": "8480675691932",
+    "productName": "VELA AROMATICA",
+    "quantity": 3,
+    "unitPrice": 7.4,
+    "finalUnitPrice": 7.4,
+    "lineTotal": 22.2
+   }
+  ]
+ },
+ "sin-cabecera": {
+  "columnas": {
+   "productName": 0,
+   "lineTotal": 1,
+   "barcode": 2,
+   "quantity": 3,
+   "unitPrice": 4
+  },
+  "lineas": [
+   {
+    "barcode": "8450564618500",
+    "productName": "TAZA CERAMICA 9CM",
+    "quantity": 4,
+    "unitPrice": 10.85,
+    "finalUnitPrice": 10.85,
+    "lineTotal": 43.4
+   },
+   {
+    "barcode": "8414885945264",
+    "productName": "VASO CRISTAL 25CL",
+    "quantity": 12,
+    "unitPrice": 9.32,
+    "finalUnitPrice": 9.32,
+    "lineTotal": 111.84
+   },
+   {
+    "barcode": "8485722969736",
+    "productName": "PLATO HONDO",
+    "quantity": 10,
+    "unitPrice": 12.25,
+    "finalUnitPrice": 12.25,
+    "lineTotal": 122.5
+   },
+   {
+    "barcode": "8450615998254",
+    "productName": "JARRA AGUA 1L",
+    "quantity": 3,
+    "unitPrice": 9.25,
+    "finalUnitPrice": 9.25,
+    "lineTotal": 27.75
+   },
+   {
+    "barcode": "8496663747666",
+    "productName": "CESTA MIMBRE",
+    "quantity": 36,
+    "unitPrice": 13.18,
+    "finalUnitPrice": 13.18,
+    "lineTotal": 474.48
+   },
+   {
+    "barcode": "8444746054743",
+    "productName": "VELA AROMATICA",
+    "quantity": 3,
+    "unitPrice": 9.06,
+    "finalUnitPrice": 9.06,
+    "lineTotal": 27.18
+   },
+   {
+    "barcode": "8419734026071",
+    "productName": "MARCO FOTO 10X15",
+    "quantity": 3,
+    "unitPrice": 7.31,
+    "finalUnitPrice": 7.31,
+    "lineTotal": 21.93
+   },
+   {
+    "barcode": "8437037424479",
+    "productName": "RELOJ PARED",
+    "quantity": 12,
+    "unitPrice": 8.54,
+    "finalUnitPrice": 8.54,
+    "lineTotal": 102.48
+   },
+   {
+    "barcode": "8489102448590",
+    "productName": "COJIN 40X40",
+    "quantity": 24,
+    "unitPrice": 14.89,
+    "finalUnitPrice": 14.89,
+    "lineTotal": 357.36
+   }
+  ]
+ },
+ "cabecera-en-fila-7": {
+  "columnas": {
+   "reference": 0,
+   "barcode": 1,
+   "productName": 2,
+   "quantity": 3,
+   "unitPrice": 4,
+   "discountPercent": 5,
+   "finalUnitPrice": 6,
+   "lineTotal": 7
+  },
+  "lineas": [
+   {
+    "barcode": "8475592004873",
+    "productName": "TAZA CERAMICA 9CM",
+    "quantity": 6,
+    "unitPrice": 11.05,
+    "discountPercent": 0,
+    "finalUnitPrice": 11.05,
+    "lineTotal": 66.3
+   },
+   {
+    "barcode": "8406699767637",
+    "productName": "VASO CRISTAL 25CL",
+    "quantity": 36,
+    "unitPrice": 13.77,
+    "discountPercent": 0,
+    "finalUnitPrice": 13.77,
+    "lineTotal": 495.72
+   },
+   {
+    "barcode": "8440694742275",
+    "productName": "PLATO HONDO",
+    "quantity": 6,
+    "unitPrice": 7.14,
+    "discountPercent": 0,
+    "finalUnitPrice": 7.14,
+    "lineTotal": 42.84
+   },
+   {
+    "barcode": "8482698013418",
+    "productName": "JARRA AGUA 1L",
+    "quantity": 12,
+    "unitPrice": 13.36,
+    "discountPercent": 5,
+    "finalUnitPrice": 12.69,
+    "lineTotal": 152.28
+   },
+   {
+    "barcode": "8456167011397",
+    "productName": "CESTA MIMBRE",
+    "quantity": 2,
+    "unitPrice": 10.05,
+    "discountPercent": 0,
+    "finalUnitPrice": 10.05,
+    "lineTotal": 20.1
+   },
+   {
+    "barcode": "8424722926219",
+    "productName": "VELA AROMATICA",
+    "quantity": 36,
+    "unitPrice": 12.42,
+    "discountPercent": 0,
+    "finalUnitPrice": 12.42,
+    "lineTotal": 447.12
+   }
+  ]
+ },
+ "columnas-extra-iva": {
+  "columnas": {
+   "barcode": 0,
+   "productName": 1,
+   "quantity": 3,
+   "unitPrice": 5,
+   "lineTotal": 7
+  },
+  "lineas": [
+   {
+    "barcode": "8481614099161",
+    "productName": "TAZA CERAMICA 9CM",
+    "quantity": 24,
+    "unitPrice": 3.43,
+    "finalUnitPrice": 3.43,
+    "lineTotal": 82.32
+   },
+   {
+    "barcode": "8461597755025",
+    "productName": "VASO CRISTAL 25CL",
+    "quantity": 24,
+    "unitPrice": 2.27,
+    "finalUnitPrice": 2.27,
+    "lineTotal": 54.48
+   },
+   {
+    "barcode": "8484889341836",
+    "productName": "PLATO HONDO",
+    "quantity": 6,
+    "unitPrice": 2.52,
+    "finalUnitPrice": 2.52,
+    "lineTotal": 15.12
+   },
+   {
+    "barcode": "8448235762201",
+    "productName": "JARRA AGUA 1L",
+    "quantity": 6,
+    "unitPrice": 12.54,
+    "finalUnitPrice": 12.54,
+    "lineTotal": 75.24
+   },
+   {
+    "barcode": "8490118973679",
+    "productName": "CESTA MIMBRE",
+    "quantity": 36,
+    "unitPrice": 5.32,
+    "finalUnitPrice": 5.32,
+    "lineTotal": 191.52
+   },
+   {
+    "barcode": "8418086026319",
+    "productName": "VELA AROMATICA",
+    "quantity": 12,
+    "unitPrice": 14.46,
+    "finalUnitPrice": 14.46,
+    "lineTotal": 173.52
+   },
+   {
+    "barcode": "8473296534597",
+    "productName": "MARCO FOTO 10X15",
+    "quantity": 2,
+    "unitPrice": 14.6,
+    "finalUnitPrice": 14.6,
+    "lineTotal": 29.2
+   },
+   {
+    "barcode": "8462546580996",
+    "productName": "RELOJ PARED",
+    "quantity": 6,
+    "unitPrice": 12.0,
+    "finalUnitPrice": 12.0,
+    "lineTotal": 72.0
+   }
+  ]
+ }
+}

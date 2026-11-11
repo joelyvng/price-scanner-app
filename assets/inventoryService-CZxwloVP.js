@@ -8,7 +8,7 @@ function smartColumns(rows, parseNum, exactLists) {
   const headerField = (raw) => {
     const s = norm(raw); if (!s) return null;
     for (const [f, list] of Object.entries(exactLists || {})) if (list.some((x) => norm(x) === s)) return f;
-    if (has(s, /(^| )(ean ?13|ean ?8|ean|gtin|upc|barcode|bar ?code|cb)( |$)|cod(igo)?( de)? barras?|条码|条形码|国际码|商品码/)) return "barcode";
+    if (has(s, /(^| )(ean ?13|ean ?8|ean|gtin|upc|barcode|bar ?code|c ?b)( |$)|cod(igo)?( de)? barras?|条码|条形码|国际码|商品码/)) return "barcode";
     if (has(s, /(^| )(ref|referencia|sku|cod ?art|codart|modelo|art)( |$)|codigo (interno|art|articulo|prov|proveedor)|articulo id|货号|编号|编码|型号|款号/)) return "reference";
     if (has(s, /descrip|concepto|denomin|nombre|detalle|(^| )(articulo|producto|product|item|name|description)( |$)|名称|品名|商品|货品|产品/)) return "productName";
     if (has(s, /(^| )(dto|dtos|desc|descuento|discount|rebaja)( |%|$)|折扣/)) return "discountPercent";
