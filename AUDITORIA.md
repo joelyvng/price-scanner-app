@@ -156,6 +156,20 @@ Por nombre o número corto hace `productLines.toArray()` una vez por búsqueda (
 con pocos miles de líneas; si crece mucho, índice multientrada de palabras del nombre en Dexie.
 *(Corrección: una versión anterior de este informe decía "dos veces". No es así: comprobado con 900 búsquedas.)*
 
+### 3.5 ✅ Importar Excel: columnas asignadas solas [verificado]
+Antes la app solo reconocía una columna si la cabecera coincidía **exactamente** con una lista corta de palabras.
+Fallaban cabeceras normales ("Código EAN", "Precio Unit.", "Uds.", "Importe neto"), las cabeceras en chino, los
+Excel sin cabecera y los que tienen la cabecera más abajo, y el usuario tenía que asignar columnas a mano.
+Ahora combina **cabeceras flexibles** (es/en/zh) con el **contenido**: el código de barras por su dígito de
+control y cantidad / precio / descuento / importe por la cuenta cantidad × precio × (1 − dto) = importe (también
+distingue precio bruto, descuento y neto). Las filas "TOTAL"/"Subtotal"/"合计" sin código ya no entran como
+productos. Si falta algo imprescindible (el código de barras), la pantalla manual sale ya rellenada.
+- 3.000 Excel aleatorios: pide asignar a mano 72,8 % → **0 %**; lo esencial (código, nombre, cantidad, importe y
+  coste de cada línea) bien en 0,1 % → **100 %**; ningún Excel que antes iba bien va ahora peor.
+- Navegador, 7 Excel reales de prueba: todos entran solos y con todas las líneas exactas; `sample-bm-order.xlsx`
+  igual que antes. Menos de 50 ms incluso con 40 columnas.
+- Pendiente: la importación de **inventario** usa todavía la detección antigua.
+
 ## 4. Seguridad — decisiones tuyas (no aplicado)
 
 ### 4.1 La consulta de inventario no pide clave
