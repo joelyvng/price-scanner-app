@@ -1,0 +1,877 @@
+{
+ "ejemplo-usuario": {
+  "descripcion": "La IA no lee la cantidad de PLATO (24) y las de debajo suben: 12, 6, 4, 10, 36, —",
+  "ia": [
+   {
+    "productName": "TAZA",
+    "barcode": "",
+    "quantity": 12,
+    "unitPrice": 1.2,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.2,
+    "lineTotal": 14.4
+   },
+   {
+    "productName": "VASO",
+    "barcode": "",
+    "quantity": 6,
+    "unitPrice": 0.95,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.95,
+    "lineTotal": 5.7
+   },
+   {
+    "productName": "PLATO",
+    "barcode": "",
+    "quantity": 4,
+    "unitPrice": 1.5,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.5,
+    "lineTotal": 36.0
+   },
+   {
+    "productName": "JARRA",
+    "barcode": "",
+    "quantity": 10,
+    "unitPrice": 3.2,
+    "discountPercent": 0,
+    "finalUnitPrice": 3.2,
+    "lineTotal": 12.8
+   },
+   {
+    "productName": "CESTA",
+    "barcode": "",
+    "quantity": 36,
+    "unitPrice": 2.1,
+    "discountPercent": 0,
+    "finalUnitPrice": 2.1,
+    "lineTotal": 21.0
+   },
+   {
+    "productName": "VELA",
+    "barcode": "",
+    "quantity": null,
+    "unitPrice": 0.6,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.6,
+    "lineTotal": 21.6
+   }
+  ],
+  "correcto": [
+   {
+    "productName": "TAZA",
+    "barcode": "",
+    "quantity": 12,
+    "unitPrice": 1.2,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.2,
+    "lineTotal": 14.4
+   },
+   {
+    "productName": "VASO",
+    "barcode": "",
+    "quantity": 6,
+    "unitPrice": 0.95,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.95,
+    "lineTotal": 5.7
+   },
+   {
+    "productName": "PLATO",
+    "barcode": "",
+    "quantity": 24,
+    "unitPrice": 1.5,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.5,
+    "lineTotal": 36.0
+   },
+   {
+    "productName": "JARRA",
+    "barcode": "",
+    "quantity": 4,
+    "unitPrice": 3.2,
+    "discountPercent": 0,
+    "finalUnitPrice": 3.2,
+    "lineTotal": 12.8
+   },
+   {
+    "productName": "CESTA",
+    "barcode": "",
+    "quantity": 10,
+    "unitPrice": 2.1,
+    "discountPercent": 0,
+    "finalUnitPrice": 2.1,
+    "lineTotal": 21.0
+   },
+   {
+    "productName": "VELA",
+    "barcode": "",
+    "quantity": 36,
+    "unitPrice": 0.6,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.6,
+    "lineTotal": 21.6
+   }
+  ],
+  "lineasConNota": [
+   2,
+   3,
+   4,
+   5
+  ]
+ },
+ "importe-perdido": {
+  "descripcion": "Se pierde el importe de la línea 2 y los de debajo suben",
+  "ia": [
+   {
+    "productName": "TAZA",
+    "barcode": "",
+    "quantity": 12,
+    "unitPrice": 1.2,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.2,
+    "lineTotal": 14.4
+   },
+   {
+    "productName": "VASO",
+    "barcode": "",
+    "quantity": 6,
+    "unitPrice": 0.95,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.95,
+    "lineTotal": 36.0
+   },
+   {
+    "productName": "PLATO",
+    "barcode": "",
+    "quantity": 24,
+    "unitPrice": 1.5,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.5,
+    "lineTotal": 12.8
+   },
+   {
+    "productName": "JARRA",
+    "barcode": "",
+    "quantity": 4,
+    "unitPrice": 3.2,
+    "discountPercent": 0,
+    "finalUnitPrice": 3.2,
+    "lineTotal": 21.0
+   },
+   {
+    "productName": "CESTA",
+    "barcode": "",
+    "quantity": 10,
+    "unitPrice": 2.1,
+    "discountPercent": 0,
+    "finalUnitPrice": 2.1,
+    "lineTotal": 21.6
+   },
+   {
+    "productName": "VELA",
+    "barcode": "",
+    "quantity": 36,
+    "unitPrice": 0.6,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.6,
+    "lineTotal": null
+   }
+  ],
+  "correcto": [
+   {
+    "productName": "TAZA",
+    "barcode": "",
+    "quantity": 12,
+    "unitPrice": 1.2,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.2,
+    "lineTotal": 14.4
+   },
+   {
+    "productName": "VASO",
+    "barcode": "",
+    "quantity": 6,
+    "unitPrice": 0.95,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.95,
+    "lineTotal": 5.7
+   },
+   {
+    "productName": "PLATO",
+    "barcode": "",
+    "quantity": 24,
+    "unitPrice": 1.5,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.5,
+    "lineTotal": 36.0
+   },
+   {
+    "productName": "JARRA",
+    "barcode": "",
+    "quantity": 4,
+    "unitPrice": 3.2,
+    "discountPercent": 0,
+    "finalUnitPrice": 3.2,
+    "lineTotal": 12.8
+   },
+   {
+    "productName": "CESTA",
+    "barcode": "",
+    "quantity": 10,
+    "unitPrice": 2.1,
+    "discountPercent": 0,
+    "finalUnitPrice": 2.1,
+    "lineTotal": 21.0
+   },
+   {
+    "productName": "VELA",
+    "barcode": "",
+    "quantity": 36,
+    "unitPrice": 0.6,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.6,
+    "lineTotal": 21.6
+   }
+  ],
+  "lineasConNota": [
+   1,
+   2,
+   3,
+   4,
+   5
+  ]
+ },
+ "precio-final-perdido-con-descuento": {
+  "descripcion": "Albarán con descuento: se pierde un precio final",
+  "ia": [
+   {
+    "productName": "TAZA",
+    "barcode": "",
+    "quantity": 12,
+    "unitPrice": 2.0,
+    "discountPercent": 10,
+    "finalUnitPrice": 1.8,
+    "lineTotal": 21.6
+   },
+   {
+    "productName": "VASO",
+    "barcode": "",
+    "quantity": 6,
+    "unitPrice": 1.5,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.5,
+    "lineTotal": 9.0
+   },
+   {
+    "productName": "PLATO",
+    "barcode": "",
+    "quantity": 24,
+    "unitPrice": 3.0,
+    "discountPercent": 5,
+    "finalUnitPrice": 8.5,
+    "lineTotal": 68.4
+   },
+   {
+    "productName": "JARRA",
+    "barcode": "",
+    "quantity": 4,
+    "unitPrice": 10.0,
+    "discountPercent": 15,
+    "finalUnitPrice": 0.72,
+    "lineTotal": 34.0
+   },
+   {
+    "productName": "CESTA",
+    "barcode": "",
+    "quantity": 10,
+    "unitPrice": 0.8,
+    "discountPercent": 10,
+    "finalUnitPrice": 0.6,
+    "lineTotal": 7.2
+   },
+   {
+    "productName": "VELA",
+    "barcode": "",
+    "quantity": 36,
+    "unitPrice": 0.6,
+    "discountPercent": 0,
+    "finalUnitPrice": 4.27,
+    "lineTotal": 21.6
+   },
+   {
+    "productName": "MARCO",
+    "barcode": "",
+    "quantity": 3,
+    "unitPrice": 4.5,
+    "discountPercent": 5,
+    "finalUnitPrice": null,
+    "lineTotal": 12.81
+   }
+  ],
+  "correcto": [
+   {
+    "productName": "TAZA",
+    "barcode": "",
+    "quantity": 12,
+    "unitPrice": 2.0,
+    "discountPercent": 10,
+    "finalUnitPrice": 1.8,
+    "lineTotal": 21.6
+   },
+   {
+    "productName": "VASO",
+    "barcode": "",
+    "quantity": 6,
+    "unitPrice": 1.5,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.5,
+    "lineTotal": 9.0
+   },
+   {
+    "productName": "PLATO",
+    "barcode": "",
+    "quantity": 24,
+    "unitPrice": 3.0,
+    "discountPercent": 5,
+    "finalUnitPrice": 2.85,
+    "lineTotal": 68.4
+   },
+   {
+    "productName": "JARRA",
+    "barcode": "",
+    "quantity": 4,
+    "unitPrice": 10.0,
+    "discountPercent": 15,
+    "finalUnitPrice": 8.5,
+    "lineTotal": 34.0
+   },
+   {
+    "productName": "CESTA",
+    "barcode": "",
+    "quantity": 10,
+    "unitPrice": 0.8,
+    "discountPercent": 10,
+    "finalUnitPrice": 0.72,
+    "lineTotal": 7.2
+   },
+   {
+    "productName": "VELA",
+    "barcode": "",
+    "quantity": 36,
+    "unitPrice": 0.6,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.6,
+    "lineTotal": 21.6
+   },
+   {
+    "productName": "MARCO",
+    "barcode": "",
+    "quantity": 3,
+    "unitPrice": 4.5,
+    "discountPercent": 5,
+    "finalUnitPrice": 4.27,
+    "lineTotal": 12.81
+   }
+  ],
+  "lineasConNota": [
+   2,
+   3,
+   4,
+   5,
+   6
+  ]
+ },
+ "precio-perdido-con-descuento": {
+  "descripcion": "Albarán con descuento: se pierde un precio original (lo delata precio × (1 − dto) = final)",
+  "ia": [
+   {
+    "productName": "TAZA",
+    "barcode": "",
+    "quantity": 12,
+    "unitPrice": 2.0,
+    "discountPercent": 10,
+    "finalUnitPrice": 1.8,
+    "lineTotal": 21.6
+   },
+   {
+    "productName": "VASO",
+    "barcode": "",
+    "quantity": 6,
+    "unitPrice": 1.5,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.5,
+    "lineTotal": 9.0
+   },
+   {
+    "productName": "PLATO",
+    "barcode": "",
+    "quantity": 24,
+    "unitPrice": 3.0,
+    "discountPercent": 5,
+    "finalUnitPrice": 2.85,
+    "lineTotal": 68.4
+   },
+   {
+    "productName": "JARRA",
+    "barcode": "",
+    "quantity": 4,
+    "unitPrice": 0.8,
+    "discountPercent": 15,
+    "finalUnitPrice": 8.5,
+    "lineTotal": 34.0
+   },
+   {
+    "productName": "CESTA",
+    "barcode": "",
+    "quantity": 10,
+    "unitPrice": 0.6,
+    "discountPercent": 10,
+    "finalUnitPrice": 0.72,
+    "lineTotal": 7.2
+   },
+   {
+    "productName": "VELA",
+    "barcode": "",
+    "quantity": 36,
+    "unitPrice": 4.5,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.6,
+    "lineTotal": 21.6
+   },
+   {
+    "productName": "MARCO",
+    "barcode": "",
+    "quantity": 3,
+    "unitPrice": null,
+    "discountPercent": 5,
+    "finalUnitPrice": 4.27,
+    "lineTotal": 12.81
+   }
+  ],
+  "correcto": [
+   {
+    "productName": "TAZA",
+    "barcode": "",
+    "quantity": 12,
+    "unitPrice": 2.0,
+    "discountPercent": 10,
+    "finalUnitPrice": 1.8,
+    "lineTotal": 21.6
+   },
+   {
+    "productName": "VASO",
+    "barcode": "",
+    "quantity": 6,
+    "unitPrice": 1.5,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.5,
+    "lineTotal": 9.0
+   },
+   {
+    "productName": "PLATO",
+    "barcode": "",
+    "quantity": 24,
+    "unitPrice": 3.0,
+    "discountPercent": 5,
+    "finalUnitPrice": 2.85,
+    "lineTotal": 68.4
+   },
+   {
+    "productName": "JARRA",
+    "barcode": "",
+    "quantity": 4,
+    "unitPrice": 10.0,
+    "discountPercent": 15,
+    "finalUnitPrice": 8.5,
+    "lineTotal": 34.0
+   },
+   {
+    "productName": "CESTA",
+    "barcode": "",
+    "quantity": 10,
+    "unitPrice": 0.8,
+    "discountPercent": 10,
+    "finalUnitPrice": 0.72,
+    "lineTotal": 7.2
+   },
+   {
+    "productName": "VELA",
+    "barcode": "",
+    "quantity": 36,
+    "unitPrice": 0.6,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.6,
+    "lineTotal": 21.6
+   },
+   {
+    "productName": "MARCO",
+    "barcode": "",
+    "quantity": 3,
+    "unitPrice": 4.5,
+    "discountPercent": 5,
+    "finalUnitPrice": 4.27,
+    "lineTotal": 12.81
+   }
+  ],
+  "lineasConNota": [
+   3,
+   4,
+   5,
+   6
+  ]
+ },
+ "valor-colado": {
+  "descripcion": "Se cuela un valor de más en las cantidades y las de debajo bajan (la última línea pierde su cantidad real)",
+  "ia": [
+   {
+    "productName": "TAZA",
+    "barcode": "",
+    "quantity": 12,
+    "unitPrice": 1.2,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.2,
+    "lineTotal": 14.4
+   },
+   {
+    "productName": "VASO",
+    "barcode": "",
+    "quantity": 6,
+    "unitPrice": 0.95,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.95,
+    "lineTotal": 5.7
+   },
+   {
+    "productName": "PLATO",
+    "barcode": "",
+    "quantity": 7,
+    "unitPrice": 1.5,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.5,
+    "lineTotal": 36.0
+   },
+   {
+    "productName": "JARRA",
+    "barcode": "",
+    "quantity": 24,
+    "unitPrice": 3.2,
+    "discountPercent": 0,
+    "finalUnitPrice": 3.2,
+    "lineTotal": 12.8
+   },
+   {
+    "productName": "CESTA",
+    "barcode": "",
+    "quantity": 4,
+    "unitPrice": 2.1,
+    "discountPercent": 0,
+    "finalUnitPrice": 2.1,
+    "lineTotal": 21.0
+   },
+   {
+    "productName": "VELA",
+    "barcode": "",
+    "quantity": 10,
+    "unitPrice": 0.6,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.6,
+    "lineTotal": 21.6
+   }
+  ],
+  "correctoSalvoUltima": [
+   {
+    "productName": "TAZA",
+    "barcode": "",
+    "quantity": 12,
+    "unitPrice": 1.2,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.2,
+    "lineTotal": 14.4
+   },
+   {
+    "productName": "VASO",
+    "barcode": "",
+    "quantity": 6,
+    "unitPrice": 0.95,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.95,
+    "lineTotal": 5.7
+   },
+   {
+    "productName": "PLATO",
+    "barcode": "",
+    "quantity": 24,
+    "unitPrice": 1.5,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.5,
+    "lineTotal": 36.0
+   },
+   {
+    "productName": "JARRA",
+    "barcode": "",
+    "quantity": 4,
+    "unitPrice": 3.2,
+    "discountPercent": 0,
+    "finalUnitPrice": 3.2,
+    "lineTotal": 12.8
+   },
+   {
+    "productName": "CESTA",
+    "barcode": "",
+    "quantity": 10,
+    "unitPrice": 2.1,
+    "discountPercent": 0,
+    "finalUnitPrice": 2.1,
+    "lineTotal": 21.0
+   },
+   {
+    "productName": "VELA",
+    "barcode": "",
+    "quantity": 36,
+    "unitPrice": 0.6,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.6,
+    "lineTotal": 21.6
+   }
+  ],
+  "lineasConNota": [
+   2,
+   3,
+   4,
+   5
+  ]
+ },
+ "lectura-correcta": {
+  "descripcion": "Lectura correcta: no se toca nada",
+  "ia": [
+   {
+    "productName": "TAZA",
+    "barcode": "",
+    "quantity": 12,
+    "unitPrice": 1.2,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.2,
+    "lineTotal": 14.4
+   },
+   {
+    "productName": "VASO",
+    "barcode": "",
+    "quantity": 6,
+    "unitPrice": 0.95,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.95,
+    "lineTotal": 5.7
+   },
+   {
+    "productName": "PLATO",
+    "barcode": "",
+    "quantity": 24,
+    "unitPrice": 1.5,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.5,
+    "lineTotal": 36.0
+   },
+   {
+    "productName": "JARRA",
+    "barcode": "",
+    "quantity": 4,
+    "unitPrice": 3.2,
+    "discountPercent": 0,
+    "finalUnitPrice": 3.2,
+    "lineTotal": 12.8
+   },
+   {
+    "productName": "CESTA",
+    "barcode": "",
+    "quantity": 10,
+    "unitPrice": 2.1,
+    "discountPercent": 0,
+    "finalUnitPrice": 2.1,
+    "lineTotal": 21.0
+   },
+   {
+    "productName": "VELA",
+    "barcode": "",
+    "quantity": 36,
+    "unitPrice": 0.6,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.6,
+    "lineTotal": 21.6
+   }
+  ],
+  "correcto": [
+   {
+    "productName": "TAZA",
+    "barcode": "",
+    "quantity": 12,
+    "unitPrice": 1.2,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.2,
+    "lineTotal": 14.4
+   },
+   {
+    "productName": "VASO",
+    "barcode": "",
+    "quantity": 6,
+    "unitPrice": 0.95,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.95,
+    "lineTotal": 5.7
+   },
+   {
+    "productName": "PLATO",
+    "barcode": "",
+    "quantity": 24,
+    "unitPrice": 1.5,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.5,
+    "lineTotal": 36.0
+   },
+   {
+    "productName": "JARRA",
+    "barcode": "",
+    "quantity": 4,
+    "unitPrice": 3.2,
+    "discountPercent": 0,
+    "finalUnitPrice": 3.2,
+    "lineTotal": 12.8
+   },
+   {
+    "productName": "CESTA",
+    "barcode": "",
+    "quantity": 10,
+    "unitPrice": 2.1,
+    "discountPercent": 0,
+    "finalUnitPrice": 2.1,
+    "lineTotal": 21.0
+   },
+   {
+    "productName": "VELA",
+    "barcode": "",
+    "quantity": 36,
+    "unitPrice": 0.6,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.6,
+    "lineTotal": 21.6
+   }
+  ],
+  "lineasConNota": []
+ },
+ "un-digito-mal": {
+  "descripcion": "Un solo dígito mal leído (24 → 2): no es un desplazamiento; no se toca",
+  "ia": [
+   {
+    "productName": "TAZA",
+    "barcode": "",
+    "quantity": 12,
+    "unitPrice": 1.2,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.2,
+    "lineTotal": 14.4
+   },
+   {
+    "productName": "VASO",
+    "barcode": "",
+    "quantity": 6,
+    "unitPrice": 0.95,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.95,
+    "lineTotal": 5.7
+   },
+   {
+    "productName": "PLATO",
+    "barcode": "",
+    "quantity": 2,
+    "unitPrice": 1.5,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.5,
+    "lineTotal": 36.0
+   },
+   {
+    "productName": "JARRA",
+    "barcode": "",
+    "quantity": 4,
+    "unitPrice": 3.2,
+    "discountPercent": 0,
+    "finalUnitPrice": 3.2,
+    "lineTotal": 12.8
+   },
+   {
+    "productName": "CESTA",
+    "barcode": "",
+    "quantity": 10,
+    "unitPrice": 2.1,
+    "discountPercent": 0,
+    "finalUnitPrice": 2.1,
+    "lineTotal": 21.0
+   },
+   {
+    "productName": "VELA",
+    "barcode": "",
+    "quantity": 36,
+    "unitPrice": 0.6,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.6,
+    "lineTotal": 21.6
+   }
+  ],
+  "correcto": [
+   {
+    "productName": "TAZA",
+    "barcode": "",
+    "quantity": 12,
+    "unitPrice": 1.2,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.2,
+    "lineTotal": 14.4
+   },
+   {
+    "productName": "VASO",
+    "barcode": "",
+    "quantity": 6,
+    "unitPrice": 0.95,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.95,
+    "lineTotal": 5.7
+   },
+   {
+    "productName": "PLATO",
+    "barcode": "",
+    "quantity": 2,
+    "unitPrice": 1.5,
+    "discountPercent": 0,
+    "finalUnitPrice": 1.5,
+    "lineTotal": 36.0
+   },
+   {
+    "productName": "JARRA",
+    "barcode": "",
+    "quantity": 4,
+    "unitPrice": 3.2,
+    "discountPercent": 0,
+    "finalUnitPrice": 3.2,
+    "lineTotal": 12.8
+   },
+   {
+    "productName": "CESTA",
+    "barcode": "",
+    "quantity": 10,
+    "unitPrice": 2.1,
+    "discountPercent": 0,
+    "finalUnitPrice": 2.1,
+    "lineTotal": 21.0
+   },
+   {
+    "productName": "VELA",
+    "barcode": "",
+    "quantity": 36,
+    "unitPrice": 0.6,
+    "discountPercent": 0,
+    "finalUnitPrice": 0.6,
+    "lineTotal": 21.6
+   }
+  ],
+  "lineasConNota": []
+ }
+}
