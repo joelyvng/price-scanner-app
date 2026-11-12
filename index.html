@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <title>轻松管理</title>
+    <meta name="description" content="Escanea el código de barras de un producto y consulta al instante su precio de coste según tu albarán." />
+    <meta name="theme-color" content="#F6F4EF" />
+    <link rel="manifest" href="/price-scanner-app/manifest.webmanifest" />
+    <link rel="icon" href="/price-scanner-app/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="/price-scanner-app/icons/icon-192.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="轻松管理" />
+    <script type="module" crossorigin src="/price-scanner-app/assets/index-meAQHCI5.js"></script>
+    <link rel="stylesheet" crossorigin href="/price-scanner-app/assets/index-CLRlrSSd.css">
+  </head>
+  <body class="bg-[#F6F4EF]">
+    <div id="root"></div>
+    <script>
+      if ("serviceWorker" in navigator && !/localhost|127\.0\.0\.1/.test(location.hostname)) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/price-scanner-app/sw.js").catch(() => {});
+        });
+      }
+      // Almacenamiento persistente: sin esto, si el móvil se queda sin espacio el
+      // navegador puede borrar IndexedDB (los albaranes guardados).
+      if (navigator.storage && navigator.storage.persist) {
+        navigator.storage.persisted().then((ok) => ok || navigator.storage.persist()).catch(() => {});
+      }
+      // Tras publicar una versión nueva, una pestaña abierta puede pedir un chunk que
+      // ya no existe: recargar una vez (como mucho cada 30 s, para no entrar en bucle).
+      window.addEventListener("vite:preloadError", (event) => {
+        try {
+          const last = Number(sessionStorage.getItem("chunk-reload-at") || 0);
+          if (Date.now() - last < 30000) return;
+          sessionStorage.setItem("chunk-reload-at", String(Date.now()));
+        } catch {
+          return;
+        }
+        event.preventDefault();
+        location.reload();
+      });
+    </script>
+  </body>
+</html>
