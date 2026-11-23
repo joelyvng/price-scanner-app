@@ -1,0 +1,10 @@
+Modelos del lector de fotos en el móvil (sin IA de pago).
+
+ppocrv6-tiny/  PP-OCRv6 tiny (PaddleOCR, Apache-2.0), convertidos a ONNX Runtime por
+               ppu-paddle-ocr (MIT): https://huggingface.co/snowfluke/ppu-paddle-ocr-models
+  det.ort   detección de texto      (PP-OCRv6_tiny_det.ort)
+  rec.ort   reconocimiento de texto (PP-OCRv6_tiny_rec.ort)
+  dict.txt  diccionario de caracteres (ppocrv6_tiny_dict.txt)
+
+Si se cambia de modelo: carpeta nueva con su nombre y actualizar la ruta en
+src/features/import/ocr/localOcr.worker.ts (así ningún móvil usa el viejo de su caché).
